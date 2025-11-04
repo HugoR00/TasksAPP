@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.room.compiler)
     implementation(libs.room.runtime.v283)
+    implementation(libs.logging.interceptor.v4120)
     runtimeOnly(libs.room.runtime)
     runtimeOnly(libs.lifecycle.compiler)
     runtimeOnly(libs.recyclerview)

@@ -10,5 +10,5 @@ import retrofit2.http.GET;
 public interface ApiService {
 
     @GET("Task")
-    Call<List<Task>> getTasks();
+    Call<List<Task>> getAllTasks();
 }
