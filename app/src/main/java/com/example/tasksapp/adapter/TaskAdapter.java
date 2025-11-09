@@ -57,7 +57,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     }
 
     //Seta as tasks na lista de task, ela é quem vai tirar a lista vazia para uma lista com tasks
-    //e atualizar caso novas sejam adicionadas
+    //e atualizar caso novas sejam adicionadass
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
         notifyDataSetChanged();
