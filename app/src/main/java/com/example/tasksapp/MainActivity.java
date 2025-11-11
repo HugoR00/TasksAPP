@@ -1,24 +1,88 @@
 package com.example.tasksapp;
 
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.tasksapp.adapter.TaskAdapter;
+import com.example.tasksapp.model.Task;
+import com.example.tasksapp.viewmodel.TaskViewModel;
+
+public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTaskListener {
+
+    private TaskViewModel viewModel;
+    private TaskAdapter adapter;
+
+    private EditText etTaskDescription;
+    private Button btnAdd;
+    private Button btnSync;
+    private RecyclerView rvTasks;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        viewModel.syncTasks();
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        initViewModel();
+        initViews();
+        setupRecyclerView();
+        observeData();
+        setupListeners();
+
+
+    }
+
+
+    @Override
+    public void onTaskComplete(Task task) {
+    }
+
+    @Override
+    public void onTaskDelete(Task task) {
+
+    }
+
+    private void initViewModel(){
+        viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+    }
+
+    private void initViews(){
+        etTaskDescription = findViewById(R.id.edit_text_description);
+        btnAdd = findViewById(R.id.button_add);
+        btnSync = findViewById(R.id.button_sync);
+        rvTasks = findViewById(R.id.recycler_view_tasks);
+    }
+
+    private void setupRecyclerView(){
+        adapter = new TaskAdapter(this);
+
+        rvTasks.setLayoutManager(new LinearLayoutManager(this));
+        rvTasks.setAdapter(adapter);
+    }
+
+    private void observeData(){
+        viewModel.getAllTasks().observe(this, tasks -> {
+            adapter.setTasks(tasks);
         });
     }
+
+    private void setupListeners(){
+        btnSync.setOnClickListener(v -> syncTasks());
+    }
+
+    private void syncTasks(){
+        viewModel.syncTasks();
+    }
+
 }

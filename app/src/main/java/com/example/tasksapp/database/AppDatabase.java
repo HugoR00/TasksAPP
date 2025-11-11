@@ -13,7 +13,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance = null;
 
-    private AppDatabase (){
+    protected AppDatabase (){
 
     }
 
@@ -25,7 +25,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     context.getApplicationContext(),
                     AppDatabase.class,
                     "task_database")
-                    .fallbackToDestructiveMigration(true)
+                    .fallbackToDestructiveMigration()
                     .build();
         }
         return instance;
