@@ -10,6 +10,7 @@ import com.example.tasksapp.api.RetrofitClient;
 import com.example.tasksapp.database.AppDatabase;
 import com.example.tasksapp.database.TaskDao;
 import com.example.tasksapp.model.Task;
+import com.example.tasksapp.util.SecurityPreferences;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -34,6 +35,9 @@ public class TaskRepository {
     //Gerenciador de threads
     private ExecutorService executorService;
 
+    //Insere as preferencias de segurança
+    private SecurityPreferences securityPreferences;
+
     public TaskRepository(Application application){
 
         //Obtém a instância do DB
@@ -51,6 +55,8 @@ public class TaskRepository {
         //Define as threads
         executorService = Executors.newFixedThreadPool(2);
 
+        securityPreferences = new SecurityPreferences(application);
+
         //OBS: A ApiService e quem executa as requisições HTTP com a API, a DAO apenas executa
         //operações no banco de dados, então o service passa pro banco e a DAO pega ou executa
         //as operações no banco
@@ -64,7 +70,13 @@ public class TaskRepository {
     }
 
     public void syncTasks(){
-        apiService.getAllTasks().enqueue(new Callback<List<Task>>() {
+
+        String token = securityPreferences.getToken();
+        String personKey = securityPreferences.getPersonKey();
+
+        //Requisicao GET la da ApiService que passa token e personkey pegos da securityprefs
+        //FLUXO -> Faz requisicao de cadastro > Api retorna token > Token e passado ao api service > salva no sharedprefs >
+        apiService.getAllTasks(token, personKey).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
                 if(response.isSuccessful() && response.body() != null){
@@ -74,6 +86,8 @@ public class TaskRepository {
                         taskDao.deleteAll();
                         taskDao.insertAll(taskList);
                     });
+                } else if(response.code() == 401){
+                    securityPreferences.logout();
                 }
             }
 
