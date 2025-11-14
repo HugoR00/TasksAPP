@@ -20,9 +20,8 @@ public interface ApiService {
     //O register da apiService será chamado depois passando esse objeto como argumento
     //O retrofit envia esse objeto como body da requisiçao, a API vai retornar um token e uma personKey
     //O GSON converte em JSON e retorna um AUTHRESPONSE
-    @POST("Create")
+    @POST("Authentication/Create")
     Call<AuthResponse> register(@Body RegisterRequest request);
-
 
     //Igual o register, mas agora o objeto contem apenas login e password cadastrados e retorna
     // AUTHRESPONSE com token, personkey e name caso o login seja efetuado com sucesso

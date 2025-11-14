@@ -15,14 +15,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TasksAPP">
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- ========================================
+            REGISTERACTIVITY
+            ======================================== -->
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+
+        <!-- ========================================
+             MAINACTIVITY
+             ======================================== -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -1,9 +1,16 @@
 package com.example.tasksapp.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class AuthResponse {
 
+    @SerializedName("token")
     private String token;
+
+    @SerializedName("personKey")
     private String personKey;
+
+    @SerializedName("name")
     private String name;
 
     public String getToken() {

@@ -1,5 +1,6 @@
 package com.example.tasksapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,12 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tasksapp.adapter.TaskAdapter;
 import com.example.tasksapp.model.Task;
+import com.example.tasksapp.util.SecurityPreferences;
 import com.example.tasksapp.viewmodel.TaskViewModel;
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTaskListener {
 
     private TaskViewModel viewModel;
     private TaskAdapter adapter;
+    private SecurityPreferences preferences;
 
     private EditText etTaskDescription;
     private Button btnAdd;
@@ -32,14 +35,25 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel.syncTasks();
+
+        preferences = new SecurityPreferences(this);
+        if(!preferences.isLoggedIn()){
+            goToLoginActivity();
+            return;
+        }
         setContentView(R.layout.activity_main);
+
         initViewModel();
+
         initViews();
+
         setupRecyclerView();
+
         observeData();
+
         setupListeners();
 
+        syncTasks();
 
     }
 
@@ -83,6 +97,13 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
 
     private void syncTasks(){
         viewModel.syncTasks();
+    }
+
+    private void goToLoginActivity(){
+        Intent intent = new Intent(this,LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
 }
