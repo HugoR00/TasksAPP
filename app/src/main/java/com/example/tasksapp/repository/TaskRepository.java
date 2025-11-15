@@ -70,23 +70,40 @@ public class TaskRepository {
     }
 
     public void syncTasks(){
+        Log.d("REPO", "syncTasks() iniciado");
+
 
         String token = securityPreferences.getToken();
         String personKey = securityPreferences.getPersonKey();
+
+        Log.d("REPO", "Token: " + token);
+        Log.d("REPO", "PersonKey: " + personKey);
+
+        if (token.isEmpty() || personKey.isEmpty()) {
+            Log.e("REPO", "Token ou PersonKey vazio! Não pode fazer requisição!");
+            return;
+        }
+
+        Log.d("REPO", "Fazendo requisição para API...");
 
         //Requisicao GET la da ApiService que passa token e personkey pegos da securityprefs
         //FLUXO -> Faz requisicao de cadastro > Api retorna token > Token e passado ao api service > salva no sharedprefs >
         apiService.getAllTasks(token, personKey).enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                Log.d("REPO", "onResponse - Código: " + response.code());
                 if(response.isSuccessful() && response.body() != null){
                     List<Task> taskList = response.body();
+                    Log.d("REPO", "Tarefas recebidas: " + taskList.size());
 
                     executorService.execute(() ->{
                         taskDao.deleteAll();
+                        Log.d("REPO", "Banco limpo");
                         taskDao.insertAll(taskList);
+                        Log.d("REPO", "Tarefas salvas no banco!");
                     });
                 } else if(response.code() == 401){
+                    Log.e("REPO", "Erro 401 - Token inválido!");
                     securityPreferences.logout();
                 }
             }
@@ -97,6 +114,8 @@ public class TaskRepository {
             }
         });
     }
+
+
 
 
 

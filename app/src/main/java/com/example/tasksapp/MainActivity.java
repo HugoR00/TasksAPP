@@ -2,6 +2,7 @@ package com.example.tasksapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,15 +17,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tasksapp.adapter.TaskAdapter;
+import com.example.tasksapp.api.RetrofitClient;
+import com.example.tasksapp.database.AppDatabase;
 import com.example.tasksapp.model.Task;
 import com.example.tasksapp.util.SecurityPreferences;
 import com.example.tasksapp.viewmodel.TaskViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTaskListener {
 
     private TaskViewModel viewModel;
     private TaskAdapter adapter;
     private SecurityPreferences preferences;
+
 
     private EditText etTaskDescription;
     private Button btnAdd;
@@ -35,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         preferences = new SecurityPreferences(this);
         if(!preferences.isLoggedIn()){
@@ -86,7 +94,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
     }
 
     private void observeData(){
+        Log.d("MAIN", "observeData() configurado");
         viewModel.getAllTasks().observe(this, tasks -> {
+            Log.d("MAIN", "Observer notificado! Tarefas: " + (tasks != null ? tasks.size() : "null"));
             adapter.setTasks(tasks);
         });
     }
@@ -96,7 +106,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnTas
     }
 
     private void syncTasks(){
+        Log.d("SYNC", "syncTasks() chamado!");
         viewModel.syncTasks();
+        Toast.makeText(this, "Sincronizando...", Toast.LENGTH_SHORT).show();
     }
 
     private void goToLoginActivity(){

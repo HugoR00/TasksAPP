@@ -1,6 +1,7 @@
 package com.example.tasksapp.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -36,6 +37,7 @@ public class TaskViewModel extends AndroidViewModel {
 
     //Delega para o repo syncar as tarefas, buscando na API e salvando no banco
     public void syncTasks(){
+        Log.d("VIEWMODEL", "syncTasks() chamado no ViewModel");
         repository.syncTasks();
     }
 }

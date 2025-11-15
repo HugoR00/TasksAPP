@@ -1,5 +1,8 @@
 package com.example.tasksapp.api;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -15,8 +18,15 @@ public class RetrofitClient {
 
     }
 
+
+
     public static synchronized Retrofit getInstance(){
         if (instance == null){
+
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+
             //Cria o intercepter que registra as requisiçoes no logcat
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor()
                     .setLevel(HttpLoggingInterceptor.Level.BODY);//Todas as requisiçoes virão completas (LEVEL.BODY)
@@ -30,7 +40,7 @@ public class RetrofitClient {
             instance = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
 
         }

@@ -3,6 +3,7 @@ package com.example.tasksapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
@@ -93,11 +94,18 @@ public class RegisterActivity extends AppCompatActivity {
                 if(response.isSuccessful() && response.body() != null){
                     AuthResponse auth = response.body();
 
+                    Log.d("AUTH", "Token recebido: " + auth.getToken());
+                    Log.d("AUTH", "PersonKey recebido: " + auth.getPersonKey());
+                    Log.d("AUTH", "Nome recebido: " + auth.getName());
+
                     preferences.saveAuthData(
                             auth.getToken(),
                             auth.getPersonKey(),
                             auth.getName()
                     );
+
+                    Log.d("AUTH", "Token salvo: " + preferences.getToken());
+                    Log.d("AUTH", "PersonKey salvo: " + preferences.getPersonKey());
 
                     Toast.makeText(RegisterActivity.this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
                     goToMainActivity();
