@@ -27,6 +27,9 @@ public interface ApiService {
     // AUTHRESPONSE com token, personkey e name caso o login seja efetuado com sucesso
     @POST("Login")
     Call<AuthResponse> login(@Body LoginRequest request);
+    
+    @POST("Task")
+    Call<Boolean> createTask(@Header("token") String token, @Header("personKey") String personKey, @Body Task task);
 
     //Metodo para retornar as tasks repassando no header um token e uma personkey para autenticacao
     @GET("Task")

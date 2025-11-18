@@ -15,6 +15,9 @@ public class Task {
     @SerializedName("Id")
     private int id;
 
+    @SerializedName("PriorityId")
+    private int priorityId;
+
     @SerializedName("Description")
     private String description;
 
@@ -65,5 +68,13 @@ public class Task {
 
     public void setComplete(boolean complete) {
         this.complete = complete;
+    }
+
+    public int getPriorityId() {
+        return priorityId;
+    }
+
+    public void setPriorityId(int priorityId) {
+        this.priorityId = priorityId;
     }
 }

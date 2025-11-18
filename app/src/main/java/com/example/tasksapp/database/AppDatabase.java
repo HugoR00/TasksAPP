@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.example.tasksapp.model.Task;
 
-@Database(entities = {Task.class}, version = 1)
+@Database(entities = {Task.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance = null;

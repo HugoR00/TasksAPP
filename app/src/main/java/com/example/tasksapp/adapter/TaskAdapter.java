@@ -4,6 +4,7 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -68,6 +69,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         private TextView description;
         private CheckBox complete;
         private ImageButton delete;
+        private Button add;
 
         public TaskViewHolder(@NonNull View itemView){
             super(itemView);
@@ -75,6 +77,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             description = itemView.findViewById(R.id.textView_description);
             complete = itemView.findViewById(R.id.checkBox_complete);
             delete = itemView.findViewById(R.id.button_delete);
+            add = itemView.findViewById(R.id.button_add);
         }
 
         public void bind (Task task){
@@ -111,6 +114,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                 // Notifica a Activity através do listener
                 listener.onTaskDelete(task);
             });
+
         }
 
     }

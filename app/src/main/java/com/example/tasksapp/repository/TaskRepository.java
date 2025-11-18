@@ -115,8 +115,42 @@ public class TaskRepository {
         });
     }
 
+    public void createTask(Task task, final OnTaskCreatedListener listener){
+        String token = securityPreferences.getToken();
+        String personKey = securityPreferences.getPersonKey();
+
+        if (token.isEmpty() || personKey.isEmpty()){
+            if(listener != null){
+                listener.onFailure("Token e/ou personKey não identificado");
+            }
+            return;
+        }
+
+        apiService.createTask(token,personKey,task).enqueue(new Callback<Boolean>(){
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    syncTasks();
+
+                    if (listener != null){
+                        listener.onSuccess();
+                    }
+                }
+            }
 
 
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                if(listener != null){
+                    listener.onFailure("Erro de conexão" + t.getMessage());
+                }
+            }
+        });
+    }
 
+    public interface OnTaskCreatedListener {
+        void onSuccess();
+        void onFailure(String errorMessage);
+    }
 
 }

@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.tasksapp.model.Task;
 import com.example.tasksapp.repository.TaskRepository;
-
+    
 import java.util.List;
 
 //ViewModel é o intermediário entre UI e dados (repo)
@@ -39,5 +39,9 @@ public class TaskViewModel extends AndroidViewModel {
     public void syncTasks(){
         Log.d("VIEWMODEL", "syncTasks() chamado no ViewModel");
         repository.syncTasks();
+    }
+
+    public void createTask(Task task, TaskRepository.OnTaskCreatedListener listener){
+        repository.createTask(task,listener);
     }
 }

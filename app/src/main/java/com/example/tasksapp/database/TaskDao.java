@@ -18,6 +18,9 @@ public interface TaskDao {
     LiveData<List<Task>> getAllTasks();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertTask(Task task);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Task> tasks);
 
     @Query("DELETE FROM tasks")
